@@ -46,10 +46,15 @@ layui.use('laydate', function(){
 
 	  //执行一个laydate实例
 	  laydate.render({
-	    elem: '#appTime' //指定元素
+	    elem: '#startTime' //指定元素
           ,type: 'datetime'
 	    ,trigger : 'click'
 	  });
+    laydate.render({
+        elem: '#endTime' //指定元素
+        ,type: 'datetime'
+        ,trigger : 'click'
+    });
 });
 
 $(function(){
@@ -57,32 +62,38 @@ $(function(){
         debug:true,
         /**//* 设置验证规则 */
         rules: {
-            info: {
+            startTime: {
                 required: true
             },
-            phone: {
+            type: {
                 required: true
             },
-            address: {
+            endTime: {
                 required: true
             },
-            appTime: {
+            calorie: {
+                required: true
+            },
+            distance: {
                 required: true
             }
         },
         /**//* 设置错误信息 */
         messages: {
-            info: {
-                required:"内容不可为空"
+            distance: {
+                required:"距离不可为空"
             },
-            appTime: {
-                required:"预约时间不可为空"
+            type: {
+                required:"类型不可为空"
             },
-            phone: {
-                required:"预约电话不可为空"
+            calorie: {
+                required:"卡路里不可为空"
             },
-            address: {
-                required:"预约地址不可为空"
+            startTime: {
+                required:"开始时间不可为空"
+            },
+            endTime: {
+                required:"结束时间不可为空"
             }
         },
         /**//* 设置验证触发事件 */
@@ -110,18 +121,14 @@ $(function(){
 //保存
 function save(){
 	var param = new Object();
-	param.info = $.trim($("#info").val());
-	param.phone = $.trim($("#phone").val());
-	param.address = $.trim($("#address").val());
-    var time = $("#appTime").val();
-    if(time!=null && time!=''){
-        time = time.split('-');
-        var myTime = new Date(time[0],(time[1]-1),time[2]);
-        param.appTime = myTime;
-    }
+	param.distance = $.trim($("#distance").val());
+	param.type = $.trim($("#type").val());
+	param.calorie = $.trim($("#calorie").val());
+	param.startTime = $.trim($("#startTime").val());
+	param.endTime = $.trim($("#endTime").val());
 
 	console.log(param);
-	var urlStr = "/user/apply/doAdd";
+	var urlStr = "/user/garbage/doAdd";
 	
 	layer.confirm('确认保存吗？', {icon: 3, title:'提示'}, function(index){
 		$.ajax({
@@ -139,9 +146,11 @@ function save(){
        			    	parent.$("#add_iframe").hide();
        			    	parent.layer.closeAll();
        				});
-    			}else if(data == "LGINOUT"){
-    				//重新登录
-    				parent.window.location.href = "/logout";    				
+    			}else if(data == "PHONE_ERR"){
+                    layer.alert('请在个人中心填写城市信息！', {icon: 2}, function(indexNo){
+                        layer.close();
+                        parent.layer.close(indexNo);
+                    });
     			}else{
     				layer.alert('保存失败！', {icon: 2}, function(indexNo){
     					parent.layer.closeAll();
@@ -161,42 +170,56 @@ function save(){
 	<form>
 		<table class="form_table" style="border-collapse: collapse;margin-left:20px;margin-top:10px;">
             <tr>
+            <td align="right" >
+                <span class="need_0">*</span>
+                <span class="text_ad_0">类型：</span>
+            </td>
+            <td>
+                <select id="type" name="type" class="input_0">
+                    <option value="1">跑步</option>
+                    <option value="2">骑行</option>
+                    <option value="3">行走</option>
+                </select>
+                <span class="validation_span"></span>
+            </td>
+            </tr>
+			<tr>
                 <td align="right" >
                     <span class="need_0">*</span>
-                    <span class="text_ad_0">电话：</span>
+                    <span class="text_ad_0">开始时间：</span>
                 </td>
                 <td>
-                    <input id="phone" type="text" name="phone" class="input_0"/>
+                    <input id="startTime" type="text" name="startTime" class="input_0"/>
                     <span class="validation_span"></span>
                 </td>
             </tr>
             <tr>
                 <td align="right" >
                     <span class="need_0">*</span>
-                    <span class="text_ad_0">地址：</span>
+                    <span class="text_ad_0">结束时间：</span>
                 </td>
                 <td>
-                    <input id="address" type="text" name="address" class="input_0"/>
+                    <input id="endTime" type="text" name="endTime" class="input_0"/>
                     <span class="validation_span"></span>
                 </td>
             </tr>
-			<tr>
+            <tr>
                 <td align="right" >
                     <span class="need_0">*</span>
-                    <span class="text_ad_0">内容：</span>
+                    <span class="text_ad_0">距离：</span>
                 </td>
                 <td>
-                    <textarea id="info" name="info" rows="4" cols="26"></textarea>
+                    <input id="distance" type="text" name="distance" class="input_0"/>
                     <span class="validation_span"></span>
                 </td>
             </tr>
-			<tr>
+            <tr>
                 <td align="right" >
                     <span class="need_0">*</span>
-                    <span class="text_ad_0">预约时间：</span>
+                    <span class="text_ad_0">卡路里：</span>
                 </td>
                 <td>
-                    <input id="appTime" type="text" name="appTime" class="input_0" value=""/>
+                    <input id="calorie" type="text" name="calorie" class="input_0"/>
                     <span class="validation_span"></span>
                 </td>
             </tr>

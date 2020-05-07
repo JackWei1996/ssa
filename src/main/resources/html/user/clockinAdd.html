@@ -46,10 +46,15 @@ layui.use('laydate', function(){
 
 	  //执行一个laydate实例
 	  laydate.render({
-	    elem: '#appTime' //指定元素
+	    elem: '#startTime' //指定元素
           ,type: 'datetime'
 	    ,trigger : 'click'
 	  });
+    laydate.render({
+        elem: '#endTime' //指定元素
+        ,type: 'datetime'
+        ,trigger : 'click'
+    });
 });
 
 $(function(){
@@ -57,29 +62,38 @@ $(function(){
         debug:true,
         /**//* 设置验证规则 */
         rules: {
-            gram: {
+            startTime: {
                 required: true
             },
             type: {
                 required: true
             },
-            city: {
+            endTime: {
                 required: true
             },
-            name: {
+            calorie: {
+                required: true
+            },
+            distance: {
                 required: true
             }
         },
         /**//* 设置错误信息 */
         messages: {
-            gram: {
-                required:"克数不可为空"
+            distance: {
+                required:"距离不可为空"
             },
             type: {
                 required:"类型不可为空"
             },
-            name: {
-                required:"电话不可为空"
+            calorie: {
+                required:"卡路里不可为空"
+            },
+            startTime: {
+                required:"开始时间不可为空"
+            },
+            endTime: {
+                required:"结束时间不可为空"
             }
         },
         /**//* 设置验证触发事件 */
@@ -107,9 +121,11 @@ $(function(){
 //保存
 function save(){
 	var param = new Object();
-	param.gram = $.trim($("#gram").val());
+	param.distance = $.trim($("#distance").val());
 	param.type = $.trim($("#type").val());
-	param.title = $.trim($("#title").val());
+	param.calorie = $.trim($("#calorie").val());
+	param.startTime = $.trim($("#startTime").val());
+	param.endTime = $.trim($("#endTime").val());
 
 	console.log(param);
 	var urlStr = "/user/garbage/doAdd";
@@ -145,28 +161,6 @@ function save(){
 	});
 }
 
-function change(){
-    var x=document.getElementById("title");
-    x.value=x.value.toUpperCase();
-    console.log(x.value);
-    $.ajax({
-        type:"POST",
-        async:true,  //默认true,异步
-        data:{"word":x.value},
-        url:"/user/garbage/search",
-        success:function(data){
-            console.log(data);
-
-            if (data){
-                $('#show').text("每千克 "+data.value+" 元").show();
-                $("#type").val(data.type);
-            }else {
-                $('#show').text("未找到,默认每千克 1 元").show();
-            }
-        }
-    });
-}
-
 </script>
 </head>
 <body>
@@ -176,38 +170,56 @@ function change(){
 	<form>
 		<table class="form_table" style="border-collapse: collapse;margin-left:20px;margin-top:10px;">
             <tr>
-            <tr>
-                <td align="right" >
-                    <span class="need_0">*</span>
-                    <span class="text_ad_0">名称：</span>
-                </td>
-                <td>
-                    <input id="title" type="text" name="title" class="input_0" onchange="change()"/>
-                    <span class="validation_span" id="show"></span>
-                </td>
-            </tr>
-                <td align="right" >
-                    <span class="need_0">*</span>
-                    <span class="text_ad_0">类型：</span>
-                </td>
-                <td>
-                    <select id="type" name="type" class="input_0">
-                        <option value="1">可回收</option>
-                        <option value="2">干垃圾</option>
-                        <option value="3">湿垃圾</option>
-                        <option value="4">有害垃圾</option>
-                    </select>
-                    <span class="validation_span"></span>
-                </td>
-
+            <td align="right" >
+                <span class="need_0">*</span>
+                <span class="text_ad_0">类型：</span>
+            </td>
+            <td>
+                <select id="type" name="type" class="input_0">
+                    <option value="1">跑步</option>
+                    <option value="2">骑行</option>
+                    <option value="3">行走</option>
+                </select>
+                <span class="validation_span"></span>
+            </td>
             </tr>
 			<tr>
                 <td align="right" >
                     <span class="need_0">*</span>
-                    <span class="text_ad_0">千克数：</span>
+                    <span class="text_ad_0">开始时间：</span>
                 </td>
                 <td>
-                    <input id="gram" type="text" name="gram" class="input_0"/>
+                    <input id="startTime" type="text" name="startTime" class="input_0"/>
+                    <span class="validation_span"></span>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" >
+                    <span class="need_0">*</span>
+                    <span class="text_ad_0">结束时间：</span>
+                </td>
+                <td>
+                    <input id="endTime" type="text" name="endTime" class="input_0"/>
+                    <span class="validation_span"></span>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" >
+                    <span class="need_0">*</span>
+                    <span class="text_ad_0">距离：</span>
+                </td>
+                <td>
+                    <input id="distance" type="text" name="distance" class="input_0"/>
+                    <span class="validation_span"></span>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" >
+                    <span class="need_0">*</span>
+                    <span class="text_ad_0">卡路里：</span>
+                </td>
+                <td>
+                    <input id="calorie" type="text" name="calorie" class="input_0"/>
                     <span class="validation_span"></span>
                 </td>
             </tr>

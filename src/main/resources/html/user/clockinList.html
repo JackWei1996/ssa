@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<title>政策管理</title>
+<title>列表</title>
 <link type="text/css" rel="stylesheet" th:href="@{/css/page.css}"/>
 <script type="text/javascript" th:src="@{/js/jquery/jquery-3.3.1.js}"></script>
 <!-- mmGrid -->
@@ -29,13 +29,18 @@
 	<table class="param_table" style="margin-left:10px;" >
 		<tr>
 			<td style="width:150px;">
-				<span>标题：</span>
-				<input type="text" id="title" name="title" class="input_0" />
+				<!--类型:1可回收,2干垃圾,3湿垃圾,4有害垃圾-->
+				<span>类型：</span>
+				<select id="type" name="type" class="input_0">
+					<option value="1">跑步</option>
+					<option value="2">骑行</option>
+					<option value="3">行走</option>
+				</select>
 			</td>
-
 			<td style="">
 			<div class="layui-btn-group">
 			  <button class="layui-btn" onclick="search()">查询</button>
+				<button class="layui-btn" onclick="addRow()">增加</button>
 			</div>
 			</td>
 		</tr>
@@ -50,11 +55,13 @@
 </html>
 
 <script type="text/javascript">
+
+
 $(function(){	
 	//表格
 	$('#exampleTableUser').mmGrid({
     	root:'rows',// 和后台数据保存列一致,对应MMGridPageVoBean rows
-		url:"/admin/word/getAllWordByLimit",
+		url:"/clockin/getAllByLimit",
     	width: 'auto',
     	height: 'auto',
     	//checkCol: true,
@@ -64,25 +71,29 @@ $(function(){
         indexCol: true,  //索引列
         params:function(){
         	var param = new Object();
-        	param.title = $.trim($("#title").val());
+        	param.type = $.trim($("#type").val());
         	return param;
         },
         cols: [{title: 'ID', name: 'id', width:60, hidden:true},
-			   {title: '标题', name: 'title', width:50},
-			   {title: '浏览次数', name: 'viewCount', width:120},
-			   {title: '创建时间', name: 'createTime', width:60},
-			   {title: '类型', name: 'status', width:40, renderer:function(val, item, rowIndex){
-                  if(val == 16){
-                      return "<span style='color:green'>招商结果</span>";
-                  }else {
-                      return "<span style='color:blue'>普通新闻</span>";
-                  }
-              }},
-			   {title: '操作', name: 'id', width:80, renderer:function(val, item, rowIndex){
-				   var buttonStr ='<span class=" layui-btn layui-btn-sm" onclick="xq('+"\'"+item.id+"\'"+')" >详情</span>' +
-				    '<span class=" layui-btn layui-btn-danger layui-btn-sm" onclick="deleteRowOne('+"\'"+item.id+"\'"+')" >删除</span>';
-				   return "<div class='span_btus' >" + buttonStr + "</div>";
-			   }}
+			{title: '开始时间', name: 'startTime', width:40},
+			{title: '结束时间', name: 'endTime', width:40},
+			{title: '距离', name: 'distance', width:40},
+			{title: '卡路里', name: 'calorie', width:40},
+			{title: '类型', name: 'type', width:80, renderer:function(val, item, rowIndex){
+					var t = "";
+					switch (val) {
+						case 1: t = "可回收";break;
+						case 2: t = "干垃圾";break;
+						case 3: t = "湿垃圾";break;
+						case 4: t = "有害";break;
+					}
+					return t;
+				}},
+			   {title: '创建时间', name: 'createTime', width:30},
+			{title: '操作', name: 'id', width:20, renderer:function(val, item, rowIndex){
+					var buttonStr ='<span class=" layui-btn layui-btn-danger layui-btn-sm" onclick="deleteRowOne('+"\'"+item.id+"\'"+')" >删除</span>';
+					return "<div class='span_btus' >" + buttonStr + "</div>";
+				}}
            ],
         plugins : [
         	$('#paginator11-1').mmPaginator({
@@ -101,38 +112,39 @@ function search(){
 	$('#exampleTableUser').mmGrid().load({"page":1});
 }
 
+function addRow(){
+	layer.open({
+		type: 2,
+		title: '增加',
+		area: ['50%', '60%'],
+		content: '/clockin/add' //iframe的url
+	});
+}
+
+
 //删除一行
 function deleteRowOne(id){
 	layer.confirm('确认删除吗？', {icon: 3, title:'提示'}, function(index){
 		var param = [];
-		param.push({"name":"ids", "value":id});
-    	$.ajax({
-    		type:"POST",
-    		async:true,  //默认true,异步
-    		data:param,
-    		url:"/admin/word/delWord",
-    		success:function(data){
-    			if(data == "SUCCESS"){
-    				layer.alert('删除成功！', {icon: 1}, function(indexOk){
-    					search();
-    					layer.close(indexOk);
-       				});
-    			}else{
-    				layer.alert('删除失败！', {icon: 2}, function(indexNo){
-       					layer.close(indexNo);
-       				});
-    			}
-    	    }
-    	});
-	});
-}
-
-function xq(id){
-	layer.open({
-	    type: 2,
-	    title: '详情',
-	    area: ['60%', '90%'],
-	    content: '/admin/word/xq?id='+id //iframe的url
+		param.push({"name":"id", "value":id});
+		$.ajax({
+			type:"POST",
+			async:true,  //默认true,异步
+			data:param,
+			url:"/clockin/del",
+			success:function(data){
+				if(data == "SUCCESS"){
+					layer.alert('删除成功！', {icon: 1}, function(indexOk){
+						search();
+						layer.close(indexOk);
+					});
+				}else{
+					layer.alert('删除失败！', {icon: 2}, function(indexNo){
+						layer.close(indexNo);
+					});
+				}
+			}
+		});
 	});
 }
 </script>

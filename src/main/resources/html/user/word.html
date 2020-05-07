@@ -65,16 +65,16 @@ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
                 <span class="validation_span"></span>
             </td>
         </tr>
-        <tr style="">
-            <main>
-                <div class="grid-container">
-                    <div class="grid-width-100" style="height: 40%">
-                        <textarea name="editor" id="editor"/></textarea>
-                    </div>
-                </div>
-            </main>
+        <tr>
+            <td align="right" >
+                <span class="need_0">*</span>
+                <span class="text_ad_0">内容：</span>
+            </td>
+            <td>
+                <textarea id="content" type="text" name="content" class="input_0" rows="10" cols="20"></textarea>
+                <span class="validation_span"></span>
+            </td>
         </tr>
-
         <tr>
             <td colspan="2" align="left" >
                 <div style="margin-top:10px;margin-bottom:20px;margin-left:120px;">
@@ -85,13 +85,6 @@ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
     </table>
 </form>
 <script>
-    var editorElement;
-    $(function(){
-        CKEDITOR.replace('editor');
-        editorElement =  CKEDITOR.document.getById( 'editor' );
-        // 4、给CKEditor赋值
-        CKEDITOR.instances.editor.setData("请填写文字内容");
-    });
 
     $('form').validate({
         debug:true,
@@ -125,11 +118,8 @@ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
     function save(){
         var param = new Object();
         param.title = $.trim($("#title").val());
-        param.type = $.trim($("#type").val());
+        param.content = $.trim($("#content").val());
 
-        // 3、获取CKEditor带HTML标签的文本
-        var CHtml= CKEDITOR.instances.editor.getData();
-        param.content = $.trim(CHtml);
         console.log(param);
         var urlStr = "/user/notice/addWord";
 
