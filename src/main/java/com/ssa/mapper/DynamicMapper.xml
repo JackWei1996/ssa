@@ -343,6 +343,9 @@
       <if test="userId!=null" >
         AND user_id = #{userId}
       </if>
+      <if test="name!=null" >
+        AND name like concat('%', #{name}, '%')
+      </if>
       <if test="title!=null and title != ''" >
         AND title like concat('%', #{title}, '%')
       </if>
@@ -364,6 +367,9 @@
     <where>
       <if test="userId!=null" >
         AND user_id = #{userId}
+      </if>
+      <if test="name!=null" >
+        AND name like concat('%', #{name}, '%')
       </if>
       <if test="title!=null and title != ''" >
         AND title like concat('%', #{title}, '%')
