@@ -49,14 +49,16 @@ public class UserController {
     @ResponseBody
     @RequestMapping("/updateUser")
     public String updateUser(User user) {
+        Subject subject = SecurityUtils.getSubject();
+        User old = (User) subject.getPrincipal();
+        user.setId(old.getId());
         return userService.updateUser(user);
     }
 
     @ResponseBody
     @RequestMapping("/getInfo")
-    public String updateUser() {
-        Subject subject = SecurityUtils.getSubject();
-        User user = (User) subject.getPrincipal();
-        return user.getId() + "";
+    public User getInfo(String name) {
+        User user = userService.getUserByPhoneAndName(null, name);
+        return user;
     }
 }

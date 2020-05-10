@@ -3,6 +3,7 @@ package com.ssa.service.impl;
 import com.ssa.mapper.DynamicMapper;
 import com.ssa.model.MMGridPageVoBean;
 import com.ssa.pojo.Dynamic;
+import com.ssa.pojo.DynamicExample;
 import com.ssa.service.DynamicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,5 +47,12 @@ public class DynamicSreviceImpl implements DynamicService {
     @Override
     public void add(Dynamic pojo) {
         dynamicMapper.insert(pojo);
+    }
+
+    @Override
+    public List<Dynamic> getMy(String name) {
+        DynamicExample example = new DynamicExample();
+        example.createCriteria().andNameEqualTo(name);
+        return dynamicMapper.selectByExample(example);
     }
 }

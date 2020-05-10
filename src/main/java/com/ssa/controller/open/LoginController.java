@@ -67,31 +67,6 @@ public class LoginController {
 		return "login";
 	}
 
-	@RequestMapping(value = "/demo/table", method = RequestMethod.GET)
-	public String demoTable() {
-		return "table";
-	}
-
-	@RequestMapping(value = "/demo/tu", method = RequestMethod.GET)
-	public String demoTu() {
-		return "tu";
-	}
-
-	@RequestMapping(value = "/demo/tu1", method = RequestMethod.GET)
-	public String tu1() {
-		return "tu1";
-	}
-
-	@RequestMapping(value = "/demo/tu2", method = RequestMethod.GET)
-	public String tu2() {
-		return "tu2";
-	}
-
-	@RequestMapping(value = "/demo/tu3", method = RequestMethod.GET)
-	public String tu3() {
-		return "tu3";
-	}
-
 	/**
 	 * Method name: login <BR>
 	 * Description: 登录验证 <BR>

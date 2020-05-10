@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 @Controller("DynamicController")
 @RequestMapping("/dynamic")
@@ -41,6 +42,11 @@ public class DynamicController {
     @RequestMapping("/getAllByLimit")
     @ResponseBody
     public Object getAllByLimit(Dynamic pojo) {
+        if (pojo == null||pojo.getPage()==null||pojo.getLimit()==null){
+            pojo = new Dynamic();
+            pojo.setPage(1);
+            pojo.setLimit(100);
+        }
         return dynamicService.getAllByLimit(pojo);
     }
 
@@ -51,6 +57,12 @@ public class DynamicController {
         User user = (User) subject.getPrincipal();
         pojo.setUserId(user.getId());
         return dynamicService.getAllByLimit(pojo);
+    }
+
+    @RequestMapping("/getMy")
+    @ResponseBody
+    public List<Dynamic> getAllByLimitUser(String name) {
+        return dynamicService.getMy(name);
     }
 
     @RequestMapping(value = "/del")
