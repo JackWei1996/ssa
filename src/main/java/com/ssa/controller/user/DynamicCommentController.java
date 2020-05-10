@@ -2,7 +2,10 @@ package com.ssa.controller.user;
 
 import com.ssa.pojo.DynamicComment;
 import com.ssa.pojo.DynamicComment;
+import com.ssa.pojo.User;
 import com.ssa.service.DynamicCommentService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +47,9 @@ public class DynamicCommentController {
     @RequestMapping("/getAllByLimitUser")
     @ResponseBody
     public Object getAllByLimitUser(DynamicComment pojo) {
-        return dynamicCommentService.getAllByLimit(pojo);
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        pojo.setUserId(user.getId());return dynamicCommentService.getAllByLimit(pojo);
     }
 
     @RequestMapping(value = "/del")

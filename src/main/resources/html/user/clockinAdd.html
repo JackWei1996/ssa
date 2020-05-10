@@ -128,7 +128,7 @@ function save(){
 	param.endTime = $.trim($("#endTime").val());
 
 	console.log(param);
-	var urlStr = "/user/garbage/doAdd";
+	var urlStr = "/clockin/doAdd";
 	
 	layer.confirm('确认保存吗？', {icon: 3, title:'提示'}, function(index){
 		$.ajax({

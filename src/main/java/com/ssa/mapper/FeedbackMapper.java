@@ -93,4 +93,8 @@ public interface FeedbackMapper {
      * @mbg.generated Thu May 07 20:02:50 CST 2020
      */
     int updateByPrimaryKey(Feedback record);
+
+    List<Feedback> getAllByLimit(Feedback pojo);
+
+    int countAllByLimit(Feedback pojo);
 }

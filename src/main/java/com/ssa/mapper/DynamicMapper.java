@@ -93,4 +93,8 @@ public interface DynamicMapper {
      * @mbg.generated Thu May 07 20:02:50 CST 2020
      */
     int updateByPrimaryKey(Dynamic record);
+
+    List<Dynamic> getAllByLimit(Dynamic pojo);
+
+    int countAllByLimit(Dynamic pojo);
 }

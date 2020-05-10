@@ -253,4 +253,40 @@
       dynamic_id = #{dynamicId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <select id="getAllByLimit"
+          parameterType="com.ssa.pojo.DynamicLike"
+          resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM `dynamic_like`
+    <where>
+      <if test="userId!=null" >
+        AND user_id = #{userId}
+      </if>
+      <if test="dynamicId!=null and dynamicId != ''" >
+        AND dynamic_id = #{dynamicId}
+      </if>
+    </where>
+    ORDER BY id DESC
+    <if test="limit!=null">
+      limit #{page}, #{limit}
+    </if>
+  </select>
+
+  <select id="countAllByLimit"
+          parameterType="com.ssa.pojo.DynamicLike"
+          resultType="int">
+    SELECT count(id)
+    FROM `dynamic_like`
+    <where>
+      <if test="userId!=null" >
+        AND user_id = #{userId}
+      </if>
+      <if test="dynamicId!=null and dynamicId != ''" >
+        AND dynamic_id = #{dynamicId}
+      </if>
+    </where>
+  </select>
 </mapper>

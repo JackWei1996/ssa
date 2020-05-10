@@ -65,6 +65,15 @@ public class Dynamic extends BaseBean{
      * @mbg.generated Thu May 07 20:02:50 CST 2020
      */
     private Integer viewCount;
+    private Long userId;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     /**
      *

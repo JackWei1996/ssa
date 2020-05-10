@@ -93,4 +93,8 @@ public interface DynamicLikeMapper {
      * @mbg.generated Thu May 07 20:02:50 CST 2020
      */
     int updateByPrimaryKey(DynamicLike record);
+
+    List<DynamicLike> getAllByLimit(DynamicLike pojo);
+
+    int countAllByLimit(DynamicLike pojo);
 }
