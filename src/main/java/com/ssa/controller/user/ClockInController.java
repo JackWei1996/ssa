@@ -41,6 +41,10 @@ public class ClockInController {
     @RequestMapping("/getAllByLimit")
     @ResponseBody
     public Object getAllByLimit(ClockIn pojo) {
+        if (pojo.getPage()==null || pojo.getLimit()==null){
+            pojo.setPage(1);
+            pojo.setLimit(100);
+        }
         return clockInService.getAllByLimit(pojo);
     }
 
@@ -77,8 +81,24 @@ public class ClockInController {
     @Transactional
     public String doAdd(ClockIn pojo) {
         try {
+            pojo.setStartTime(new Date());
             pojo.setCreateTime(new Date());
             clockInService.add(pojo);
+            return "SUCCESS";
+        } catch (Exception e) {
+            logger.error("添加异常", e);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return "ERROR";
+        }
+    }
+
+    @RequestMapping(value = "/update")
+    @ResponseBody
+    @Transactional
+    public String update(ClockIn pojo) {
+        try {
+            pojo.setEndTime(new Date());
+            clockInService.update(pojo);
             return "SUCCESS";
         } catch (Exception e) {
             logger.error("添加异常", e);

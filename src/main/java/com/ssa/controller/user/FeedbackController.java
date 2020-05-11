@@ -4,6 +4,7 @@ import com.ssa.pojo.Dynamic;
 import com.ssa.pojo.Feedback;
 import com.ssa.pojo.User;
 import com.ssa.service.FeedbackService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -41,6 +43,10 @@ public class FeedbackController {
     @RequestMapping("/getAllByLimit")
     @ResponseBody
     public Object getAllByLimit(Feedback pojo) {
+        if (pojo.getPage()==null || pojo.getLimit()==null){
+            pojo.setPage(1);
+            pojo.setLimit(100);
+        }
         return feedbackService.getAllByLimit(pojo);
     }
 
@@ -68,7 +74,11 @@ public class FeedbackController {
     }
 
     @RequestMapping(value = "/add")
-    public String addUserPage() {
+    public String addUserPage(Long id, Model model) {
+        if (id!=null){
+            Feedback feedback = feedbackService.seleteById(id);
+            model.addAttribute("f", feedback);
+        }
         return "user/feedbackAdd";
     }
 
@@ -79,6 +89,20 @@ public class FeedbackController {
         try {
             pojo.setCreateTime(new Date());
             feedbackService.add(pojo);
+            return "SUCCESS";
+        } catch (Exception e) {
+            logger.error("添加异常", e);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return "ERROR";
+        }
+    }
+
+    @RequestMapping(value = "/update")
+    @ResponseBody
+    @Transactional
+    public String update(Feedback pojo) {
+        try {
+            feedbackService.update(pojo);
             return "SUCCESS";
         } catch (Exception e) {
             logger.error("添加异常", e);

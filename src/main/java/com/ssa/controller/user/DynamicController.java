@@ -4,6 +4,7 @@ import com.ssa.pojo.ClockIn;
 import com.ssa.pojo.Dynamic;
 import com.ssa.pojo.User;
 import com.ssa.service.DynamicService;
+import com.ssa.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ import java.util.List;
 public class DynamicController {
     @Autowired
     private DynamicService dynamicService;
+    @Autowired
+    private UserService userService;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -89,6 +92,12 @@ public class DynamicController {
     @Transactional
     public String doAdd(Dynamic pojo) {
         try {
+            if (pojo.getUserId()!=null){
+                User user = userService.selectByPrimaryKey(pojo.getUserId());
+                pojo.setName(user.getName());
+                pojo.setViewCount(0);
+                pojo.setLikeCount(0);
+            }
             pojo.setCreateTime(new Date());
             dynamicService.add(pojo);
             return "SUCCESS";

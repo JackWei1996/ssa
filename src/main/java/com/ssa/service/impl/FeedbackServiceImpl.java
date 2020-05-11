@@ -48,4 +48,14 @@ public class FeedbackServiceImpl implements FeedbackService {
     public void add(Feedback pojo) {
         feedbackMapper.insert(pojo);
     }
+
+    @Override
+    public Feedback seleteById(Long id) {
+        return feedbackMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public void update(Feedback pojo) {
+        feedbackMapper.updateByPrimaryKeySelective(pojo);
+    }
 }

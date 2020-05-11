@@ -9,4 +9,8 @@ public interface FeedbackService {
     void deleteById(Long id);
 
     void add(Feedback pojo);
+
+    Feedback seleteById(Long id);
+
+    void update(Feedback pojo);
 }

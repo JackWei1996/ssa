@@ -20,6 +20,15 @@ public class Dynamic extends BaseBean{
      * @mbg.generated Thu May 07 20:02:50 CST 2020
      */
     private String name;
+    private String headImg;
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
+    }
 
     /**
      *

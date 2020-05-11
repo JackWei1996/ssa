@@ -80,7 +80,8 @@ $(function(){
 			{title: '回复内容', name: 'reply', width:40},
 			{title: '创建时间', name: 'createTime', width:30},
 			{title: '操作', name: 'id', width:20, renderer:function(val, item, rowIndex){
-					var buttonStr ='<span class=" layui-btn layui-btn-danger layui-btn-sm" onclick="deleteRowOne('+"\'"+item.id+"\'"+')" >删除</span>';
+					var buttonStr ='<span class=" layui-btn layui-btn-danger layui-btn-sm" onclick="deleteRowOne('+"\'"+item.id+"\'"+')" >删除</span>'+
+							'<span class=" layui-btn layui-btn-sm" onclick="hf('+"\'"+item.id+"\'"+')" >回复</span>';
 					return "<div class='span_btus' >" + buttonStr + "</div>";
 				}}
            ],
@@ -101,12 +102,12 @@ function search(){
 	$('#exampleTableUser').mmGrid().load({"page":1});
 }
 
-function addRow(){
+function hf(id){
 	layer.open({
 		type: 2,
-		title: '增加',
+		title: '回复',
 		area: ['50%', '60%'],
-		content: '/feedback/add' //iframe的url
+		content: '/feedback/add?id='+id //iframe的url
 	});
 }
 

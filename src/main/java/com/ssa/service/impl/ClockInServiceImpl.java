@@ -3,7 +3,9 @@ package com.ssa.service.impl;
 import com.ssa.mapper.ClockInMapper;
 import com.ssa.model.MMGridPageVoBean;
 import com.ssa.pojo.ClockIn;
+import com.ssa.pojo.ClockInExample;
 import com.ssa.service.ClockInService;
+import com.ssa.utils.GPSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,22 @@ public class ClockInServiceImpl implements ClockInService {
     @Override
     public void add(ClockIn pojo) {
         clockInMapper.insert(pojo);
+    }
+
+    @Override
+    public void update(ClockIn pojo) {
+        ClockInExample example = new ClockInExample();
+        example.createCriteria().andUserIdEqualTo(pojo.getUserId())
+                .andEndTimeIsNull();
+        List<ClockIn> clockIns = clockInMapper.selectByExample(example);
+        if (clockIns.size()>0){
+            ClockIn old = clockIns.get(0);
+            double jl = GPSUtils.GetDistance(Double.parseDouble(old.getStartLat()), Double.parseDouble(old.getStartLat()), Double.parseDouble(pojo.getEndLat()), Double.parseDouble(pojo.getEndLng()));
+            pojo.setDistance(jl+"");
+            pojo.setId(clockIns.get(0).getId());
+            clockInMapper.updateByPrimaryKeySelective(pojo);
+        }
+
     }
 
 }

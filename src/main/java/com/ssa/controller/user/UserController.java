@@ -51,7 +51,13 @@ public class UserController {
     public String updateUser(User user) {
         Subject subject = SecurityUtils.getSubject();
         User old = (User) subject.getPrincipal();
-        user.setId(old.getId());
+        if (old == null){
+            User user1 = userService.getUserByPhoneAndName(null,user.getName());
+            user.setId(user1.getId());
+        }else {
+            user.setId(old.getId());
+        }
+
         return userService.updateUser(user);
     }
 

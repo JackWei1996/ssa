@@ -41,6 +41,10 @@ public class DynamicCommentController {
     @RequestMapping("/getAllByLimit")
     @ResponseBody
     public Object getAllByLimit(DynamicComment pojo) {
+        if (pojo.getPage()==null || pojo.getLimit()==null){
+            pojo.setPage(1);
+            pojo.setLimit(100);
+        }
         return dynamicCommentService.getAllByLimit(pojo);
     }
 

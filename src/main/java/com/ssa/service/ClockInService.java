@@ -8,4 +8,6 @@ public interface ClockInService {
     void deleteById(Long id);
 
     void add(ClockIn pojo);
+
+    void update(ClockIn pojo);
 }
