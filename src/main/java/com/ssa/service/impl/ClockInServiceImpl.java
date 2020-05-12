@@ -1,9 +1,11 @@
 package com.ssa.service.impl;
 
 import com.ssa.mapper.ClockInMapper;
+import com.ssa.mapper.UserMapper;
 import com.ssa.model.MMGridPageVoBean;
 import com.ssa.pojo.ClockIn;
 import com.ssa.pojo.ClockInExample;
+import com.ssa.pojo.User;
 import com.ssa.service.ClockInService;
 import com.ssa.utils.GPSUtils;
 import org.slf4j.Logger;
@@ -19,6 +21,8 @@ public class ClockInServiceImpl implements ClockInService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     ClockInMapper clockInMapper;
+    @Resource
+    UserMapper userMapper;
     @Override
     public Object getAllByLimit(ClockIn pojo) {
         int size = 0;
@@ -58,8 +62,9 @@ public class ClockInServiceImpl implements ClockInService {
         List<ClockIn> clockIns = clockInMapper.selectByExample(example);
         if (clockIns.size()>0){
             ClockIn old = clockIns.get(0);
-            double jl = GPSUtils.GetDistance(Double.parseDouble(old.getStartLat()), Double.parseDouble(old.getStartLat()), Double.parseDouble(pojo.getEndLat()), Double.parseDouble(pojo.getEndLng()));
-            pojo.setDistance(jl+"");
+            // 计算距离
+            double jl = GPSUtils.GetDistance(Double.parseDouble(old.getStartLng()), Double.parseDouble(old.getStartLat()), Double.parseDouble(pojo.getEndLng()), Double.parseDouble(pojo.getEndLat()));
+            pojo.setDistance((jl*1000)+"");
             pojo.setId(clockIns.get(0).getId());
             clockInMapper.updateByPrimaryKeySelective(pojo);
         }
