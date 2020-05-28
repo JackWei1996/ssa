@@ -81,6 +81,7 @@ public class ClockInController {
     @Transactional
     public String doAdd(ClockIn pojo) {
         try {
+            pojo.setType(1);
             pojo.setStartTime(new Date());
             pojo.setCreateTime(new Date());
             clockInService.add(pojo);
